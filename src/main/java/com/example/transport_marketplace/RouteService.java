@@ -1,5 +1,6 @@
 package com.example.transport_marketplace;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.RouteMatcher;
@@ -14,36 +15,35 @@ import java.util.stream.Collectors;
 @Service
 public class RouteService {
     private static final String ROUTES_FILE_PATH = "src/main/resources/routes.json";
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private List<Route> routes = new ArrayList<>();
 
     public RouteService(){
-        try {
-            loadRoutes();
-        } catch (IOException e) {
-            System.out.println("Ошибка загрузки маршрутов: " + e.getMessage());
-        }
+        loadRoutes();
     }
-    public void loadRoutes() throws IOException{
-        ObjectMapper objectMapper = new ObjectMapper();
+    public void loadRoutes() {
         File file = new File(ROUTES_FILE_PATH);
         if (file.exists()) {
-            routes = objectMapper.readValue(file,
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, Route.class));
+            try {
+                routes = objectMapper.readValue(file, new TypeReference<List<Route>>() {});
+            }
+            catch (IOException e){
+                System.err.println("Ошибка загрузки маршрутов: " + e.getMessage());
+            }
         }
     }
-    private void saveRoutes() throws IOException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(ROUTES_FILE_PATH), routes);
+    private void saveRoutes() {
+        try {
+            objectMapper.writeValue(new File(ROUTES_FILE_PATH), routes);
+        } catch (IOException e) {
+            System.err.println("Ошибка сохрания маршрутов: " + e.getMessage());
+        }
     }
 
     public Route addRoute(Route route){
         route.setId(routes.size() + 1);
         routes.add(route);
-        try {
-            saveRoutes();
-        } catch (IOException e) {
-            System.out.println("Ошибка сохранения маршрутов: " + e.getMessage());
-        }
+        saveRoutes();
         return route;
     }
 
@@ -51,7 +51,11 @@ public class RouteService {
         return routes;
     }
     public boolean deleteRoute(int id){
-        return routes.removeIf(route -> route.getId() == id);
+        boolean removed = routes.removeIf(route -> route.getId() == id);
+        if (removed) {
+            saveRoutes();
+        }
+        return removed;
     }
     public Route updateRoute(int id, Route updatedRoute){
         Optional<Route> existingRoute = routes.stream().filter(route -> route.getId() == id).findFirst();
@@ -62,8 +66,10 @@ public class RouteService {
             route.setTime(updatedRoute.getTime());
             route.setTransport(updatedRoute.getTransport());
             route.setPrice(updatedRoute.getPrice());
+            saveRoutes();
             return route;
         }
+        saveRoutes();
         return null;
     }
     public List<Route> searchRoutes(String route, String date, String transport){
@@ -73,4 +79,5 @@ public class RouteService {
                                     (transport == null || r.getTransport().equalsIgnoreCase(transport)))
                 .collect(Collectors.toList());
     }
+
 }

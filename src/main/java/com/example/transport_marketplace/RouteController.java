@@ -36,6 +36,7 @@ public class RouteController {
         return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                         : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     // Обновление маршрута по ID
     @PutMapping("/{id}")
     public ResponseEntity<Route> updateRoute(@PathVariable int id, @RequestBody Route updatedRoute){
