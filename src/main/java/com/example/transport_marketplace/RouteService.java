@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RouteService {
@@ -64,5 +65,12 @@ public class RouteService {
             return route;
         }
         return null;
+    }
+    public List<Route> searchRoutes(String route, String date, String transport){
+        return routes.stream()
+                .filter(r -> (route == null || r.getRoute().equalsIgnoreCase(route)) &&
+                                    (date == null || r.getDate().equals(date)) &&
+                                    (transport == null || r.getTransport().equalsIgnoreCase(transport)))
+                .collect(Collectors.toList());
     }
 }

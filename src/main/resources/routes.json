@@ -1,18 +1,22 @@
-[
-  {
-    "id": 1,
-    "route": "Moscow - St. Petersburg",
-    "date": "2025-02-20",
-    "time": "10:00",
-    "transport": "bus",
-    "price": 1500
-  },
-  {
-    "id": 2,
-    "route": "Moscow - Kazan",
-    "date": "2025-02-21",
-    "time": "15:00",
-    "transport": "train",
-    "price": 2500
-  }
-]
+[ {
+  "id" : 1,
+  "route" : "Moscow - St. Petersburg",
+  "date" : "2025-02-20",
+  "time" : "10:00",
+  "transport" : "bus",
+  "price" : 1500.0
+}, {
+  "id" : 2,
+  "route" : "Moscow - Kazan",
+  "date" : "2025-02-21",
+  "time" : "15:00",
+  "transport" : "train",
+  "price" : 2500.0
+}, {
+  "id" : 3,
+  "route" : "Москва - Казань",
+  "date" : "2025-02-22",
+  "time" : "12:00",
+  "transport" : "Поезд",
+  "price" : 2000.0
+} ]

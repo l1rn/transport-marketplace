@@ -29,6 +29,20 @@ public class RouteController {
         return new ResponseEntity<>(savedRoute, HttpStatus.CREATED);
     }
 
+    // Удаление маршрута по ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRoute(@PathVariable int id){
+        boolean deleted = routeService.deleteRoute(id);
+        return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
+                        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    // Обновление маршрута по ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Route> updateRoute(@PathVariable int id, @RequestBody Route updatedRoute){
+        Route route = routeService.updateRoute(id, updatedRoute);
+        return route != null ? new ResponseEntity<>(route, HttpStatus.OK)
+                            : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     // Поиск маршрутов по дате
     @GetMapping("/searchByDate")
     public ResponseEntity<List<Route>> searchByDate(@RequestParam String date){
@@ -47,18 +61,13 @@ public class RouteController {
         return new ResponseEntity<>(filteredRoutes, HttpStatus.OK);
     }
 
-    // Удаление маршрута по ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoute(@PathVariable int id){
-        boolean deleted = routeService.deleteRoute(id);
-        return deleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                        : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    // Обновление маршрута по ID
-    @PutMapping("/{id}")
-    public ResponseEntity<Route> updateRoute(@PathVariable int id, @RequestBody Route updatedRoute){
-        Route route = routeService.updateRoute(id, updatedRoute);
-        return route != null ? new ResponseEntity<>(route, HttpStatus.OK)
-                            : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    // Поиск маршрутов
+    @GetMapping("/search")
+    public ResponseEntity<List<Route>> searchRoutes(
+            @RequestParam(required = false) String route,
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) String transport){
+        List<Route> filteredRoutes = routeService.searchRoutes(route, date, transport);
+        return new ResponseEntity<>(filteredRoutes, HttpStatus.OK);
     }
 }
