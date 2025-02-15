@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "route": "Moscow - St. Petersburg",
+    "date": "2025-02-20",
+    "time": "10:00",
+    "transport": "bus",
+    "price": 1500
+  },
+  {
+    "id": 2,
+    "route": "Moscow - Kazan",
+    "date": "2025-02-21",
+    "time": "15:00",
+    "transport": "train",
+    "price": 2500
+  }
+]
