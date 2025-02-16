@@ -13,6 +13,7 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
+
     // Получение всех бронирований
     @GetMapping
     public ResponseEntity<List<Booking>> getBookings(){

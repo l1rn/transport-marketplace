@@ -41,7 +41,8 @@ public class RouteService {
     }
 
     public Route addRoute(Route route){
-        route.setId(routes.size() + 1);
+        int newID = routes.stream().mapToInt(Route::getId).max().orElse(0) + 1;
+        route.setId(newID);
         routes.add(route);
         saveRoutes();
         return route;
@@ -74,9 +75,9 @@ public class RouteService {
     }
     public List<Route> searchRoutes(String route, String date, String transport){
         return routes.stream()
-                .filter(r -> (route == null || r.getRoute().equalsIgnoreCase(route)) &&
-                                    (date == null || r.getDate().equals(date)) &&
-                                    (transport == null || r.getTransport().equalsIgnoreCase(transport)))
+                .filter(r -> (route == null || r.getRoute().trim().equalsIgnoreCase(route.trim())) &&
+                                    (date == null || r.getDate().trim().equals(date.trim())) &&
+                                    (transport == null || r.getTransport().trim().equalsIgnoreCase(transport.trim())))
                 .collect(Collectors.toList());
     }
 
