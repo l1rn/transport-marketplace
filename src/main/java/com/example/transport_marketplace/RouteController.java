@@ -72,12 +72,12 @@ public class RouteController {
             @RequestParam(required = false) String timeFrom,
             @RequestParam(required = false) String timeTo) {
 
-        System.out.println("🚀 Получен запрос на поиск!");
+        System.out.println("Получен запрос на поиск!");
         System.out.println("Параметры: route=" + route + ", date=" + date + ", transport=" + transport +
                 ", timeFrom=" + timeFrom + ", timeTo=" + timeTo);
 
         List<Route> filteredRoutes = routeService.searchRoutes(route, date, transport, timeFrom, timeTo);
-        System.out.println("🔍 Найдено маршрутов: " + filteredRoutes.size());
+        System.out.println("Найдено маршрутов: " + filteredRoutes.size());
 
         return new ResponseEntity<>(filteredRoutes, HttpStatus.OK);
     }
