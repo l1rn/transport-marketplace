@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/routes")
+@CrossOrigin(origins = "*")
 public class RouteController {
     @Autowired
     private RouteService routeService;
@@ -67,8 +68,18 @@ public class RouteController {
     public ResponseEntity<List<Route>> searchRoutes(
             @RequestParam(required = false) String route,
             @RequestParam(required = false) String date,
-            @RequestParam(required = false) String transport){
-        List<Route> filteredRoutes = routeService.searchRoutes(route, date, transport);
+            @RequestParam(required = false) String transport,
+            @RequestParam(required = false) String timeFrom,
+            @RequestParam(required = false) String timeTo) {
+
+        System.out.println("🚀 Получен запрос на поиск!");
+        System.out.println("Параметры: route=" + route + ", date=" + date + ", transport=" + transport +
+                ", timeFrom=" + timeFrom + ", timeTo=" + timeTo);
+
+        List<Route> filteredRoutes = routeService.searchRoutes(route, date, transport, timeFrom, timeTo);
+        System.out.println("🔍 Найдено маршрутов: " + filteredRoutes.size());
+
         return new ResponseEntity<>(filteredRoutes, HttpStatus.OK);
     }
+
 }

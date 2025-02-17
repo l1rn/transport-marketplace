@@ -18,7 +18,7 @@ public class BookingService {
     public BookingService(){
         loadBookings();
     }
-    private void loadBookings(){
+    private synchronized void loadBookings(){
         File file = new File(BOOKING_FILE_PATH);
         if(file.exists()){
             try {
@@ -28,29 +28,27 @@ public class BookingService {
             }
             catch (IOException e){
                 System.err.println("Ошибка загрузки бронирований: " + e.getMessage());
-                bookings.clear();
             }
         }
-
     }
-    private void saveBookings(){
+    private synchronized void saveBookings(){
         try {
             objectMapper.writeValue(new File(BOOKING_FILE_PATH), bookings);
         } catch (IOException e) {
             System.err.println("Ошибка сохранения бронирований: " + e.getMessage());
         }
     }
-    public List<Booking> getAllBookings(){
+    public synchronized List<Booking> getAllBookings(){
         return bookings;
     }
-    public Booking createBooking(Booking booking){
+    public synchronized Booking createBooking(Booking booking){
         booking.setId(nextId++);
         bookings.add(booking);
         saveBookings();
         return  booking;
     }
 
-    public boolean cancelBooking(int id){
+    public synchronized boolean cancelBooking(int id){
         boolean removed = bookings.removeIf(b -> b.getId() == id);
         if(removed){
             saveBookings();

@@ -5,10 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookings")
+@CrossOrigin(origins = "*")
 public class BookingController {
     @Autowired
     private BookingService bookingService;
@@ -29,5 +33,17 @@ public class BookingController {
     public ResponseEntity<Void> cancelBooking(@PathVariable int id){
         boolean removed = bookingService.cancelBooking(id);
         return removed ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBookingId(@PathVariable int id){
+        Optional<Booking> booking = bookingService.getAllBookings()
+                .stream()
+                .filter(b -> b.getId() == id)
+                .findFirst();
+
+        return booking
+                .<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Бронирование с ID " + id + " не найдено."));
     }
 }

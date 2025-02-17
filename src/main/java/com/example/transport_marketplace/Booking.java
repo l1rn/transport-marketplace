@@ -4,6 +4,9 @@ public class Booking {
     private int id;
     private int routeId;
     private String passengerName;
+    public Booking(){
+
+    }
     public Booking(int id, int routeId, String passengerName){
         this.id = id;
         this.routeId = routeId;
