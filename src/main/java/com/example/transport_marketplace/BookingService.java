@@ -28,8 +28,10 @@ public class BookingService {
             }
             catch (IOException e){
                 System.err.println("Ошибка загрузки бронирований: " + e.getMessage());
+                bookings.clear();
             }
         }
+
     }
     private void saveBookings(){
         try {
